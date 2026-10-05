@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Escape | Evacuation Route Simulator</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+
+    <header class="topbar">
+
+        <div class="brand">
+            <div class="brand-icon">⌁</div>
+
+            <div>
+                <h1 id="appTitle">Smart Escape</h1>
+                <p id="appSubtitle">
+                    Interactive Evacuation Route Simulator
+                </p>
+            </div>
+        </div>
+
+        <div class="header-actions">
+
+            <div class="building-info">
+                <span id="buildingLabel">Building</span>
+                <strong id="buildingName">Not loaded</strong>
+            </div>
+
+            <button id="languageBtn" class="language-btn">
+                বাংলা
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="container">
+
+        <!-- STATUS -->
+
+        <section class="hero-status">
+
+            <div class="status-main">
+
+                <div class="status-icon" id="statusIcon">
+                    ✓
+                </div>
+
+                <div>
+                    <span class="eyebrow" id="statusLabel">
+                        SYSTEM STATUS
+                    </span>
+
+                    <h2 id="status">
+                        Import a building file to begin
+                    </h2>
+
+                    <p id="statusDescription">
+                        Load a valid building.json dataset to calculate
+                        the safest available route.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="route-summary">
+
+                <div class="summary-item">
+                    <span id="exitLabel">Exit</span>
+                    <strong id="selectedExit">-</strong>
+                </div>
+
+                <div class="summary-item">
+                    <span id="costLabel">Cost</span>
+                    <strong id="totalCost">-</strong>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- CONTROLS -->
+
+        <section class="control-panel">
+
+            <div class="panel-heading">
+
+                <div>
+                    <span class="eyebrow" id="controlLabel">
+                        ROUTE CONTROL
+                    </span>
+
+                    <h2 id="controlTitle">
+                        Select starting location
+                    </h2>
+                </div>
+
+                <button id="resetBtn" class="secondary-btn">
+                    ↻ <span id="resetText">Reset</span>
+                </button>
+
+            </div>
+
+
+            <div class="control-grid">
+
+                <div class="input-group">
+
+                    <label for="startSelect" id="startLabel">
+                        Starting Location
+                    </label>
+
+                    <select id="startSelect" disabled>
+                        <option value="">
+                            Load building first
+                        </option>
+                    </select>
+
+                </div>
+
+
+                <div class="hazard-controls">
+
+                    <button
+                        id="blockNodeBtn"
+                        class="danger-btn"
+                        disabled
+                    >
+                        Block Node
+                    </button>
+
+                    <button
+                        id="blockEdgeBtn"
+                        class="warning-btn"
+                        disabled
+                    >
+                        Block Corridor
+                    </button>
+
+                    <button
+                        id="closeExitBtn"
+                        class="danger-btn"
+                        disabled
+                    >
+                        Close Exit
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- MAP -->
+
+        <section class="map-panel">
+
+            <div class="panel-heading">
+
+                <div>
+                    <span class="eyebrow" id="mapLabel">
+                        BUILDING MAP
+                    </span>
+
+                    <h2 id="mapTitle">
+                        Live evacuation network
+                    </h2>
+                </div>
+
+                <div class="map-stats">
+
+                    <span>
+                        <b id="nodeCount">0</b>
+                        <small id="nodesText">Nodes</small>
+                    </span>
+
+                    <span>
+                        <b id="edgeCount">0</b>
+                        <small id="edgesText">Corridors</small>
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div id="map">
+
+                <div class="map-empty">
+
+                    <div class="empty-icon">⌖</div>
+
+                    <h3 id="emptyTitle">
+                        No building loaded
+                    </h3>
+
+                    <p id="emptyDescription">
+                        Import building.json to visualize the evacuation
+                        network.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- LEGEND -->
+
+            <div class="legend">
+
+                <div>
+                    <span class="legend-dot room"></span>
+                    <span id="roomText">Room</span>
+                </div>
+
+                <div>
+                    <span class="legend-dot junction"></span>
+                    <span id="junctionText">Junction</span>
+                </div>
+
+                <div>
+                    <span class="legend-dot exit"></span>
+                    <span id="exitText">Exit</span>
+                </div>
+
+                <div>
+                    <span class="legend-line"></span>
+                    <span id="routeText">Best Route</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ROUTE DETAILS -->
+
+        <section class="route-panel">
+
+            <div class="panel-heading">
+
+                <div>
+                    <span class="eyebrow" id="routeLabel">
+                        ROUTE ANALYSIS
+                    </span>
+
+                    <h2 id="routeTitle">
+                        Lowest-cost evacuation route
+                    </h2>
+                </div>
+
+            </div>
+
+
+            <div class="route-content">
+
+                <div class="route-path" id="routePath">
+
+                    <span class="route-placeholder">
+                        Route will appear here
+                    </span>
+
+                </div>
+
+
+                <div class="route-meta">
+
+                    <div>
+                        <span id="destinationText">
+                            Destination
+                        </span>
+
+                        <strong id="routeExit">-</strong>
+                    </div>
+
+                    <div>
+                        <span id="routeCostText">
+                            Total Cost
+                        </span>
+
+                        <strong id="routeCost">-</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- FILE IMPORT -->
+
+        <section class="import-panel">
+
+            <div class="import-content">
+
+                <div class="upload-icon">
+                    ↑
+                </div>
+
+                <div>
+
+                    <h2 id="importTitle">
+                        Import Building Dataset
+                    </h2>
+
+                    <p id="importDescription">
+                        Select a valid building.json file from your computer.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <label class="upload-btn">
+
+                <span id="uploadText">
+                    Choose JSON File
+                </span>
+
+                <input
+                    type="file"
+                    id="fileInput"
+                    accept=".json,application/json"
+                >
+
+            </label>
+
+        </section>
+
+
+        <!-- ERROR / MESSAGE -->
+
+        <div
+            id="messageBox"
+            class="message-box hidden"
+            role="alert"
+        ></div>
+
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <span>
+            Smart Escape
+        </span>
+
+        <span>
+            Frontend Simulation
+        </span>
+
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
